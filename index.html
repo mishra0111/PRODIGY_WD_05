@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather app</title>
+   <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="box">
+        <div class="searchbar">
+            <input type="text" name="search" class="search" placeholder="Enter the City">
+            <button type="button" class="search-btn"><img src="images/search.png" alt="search png" ></button>
+        </div>
+        <div class="weather">
+            <img src="images/weather.png" class="weather-img">
+             <h1 class="temp">22° C</h1>
+            <h2 class="city"> New York </h2>
+        </div>
+        <div class="info">
+           <div class="col">
+            <img src="images/humdity.png" class="info-pic" alt="humidity">
+            <h3 class="humidity">50%</h3>
+            <h3>Humidity</h3>
+           </div>
+           <div class="col">
+            <img src="images/wind.png" class="info-pic" alt="wind speed">
+            <h3 class="speed">12 kmph</h3>
+            <h3>Wind Speed</h3>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const apikey = "f4fd14eb7e09f7e877136ee77344989a";
+
+      const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+    
+const searchbox=document.querySelector(".searchbar input");
+const searchbtn=document.querySelector(".searchbar button");
+      
+async function checkweather(city) {
+        try {
+          const response = await fetch(apiurl + city + `&appid=${apikey}`);
+          const data = await response.json();
+
+          if (response.ok) {
+            document.querySelector(".city").innerHTML = data.name;
+            document.querySelector(".speed").innerHTML = data.wind.speed + "kmph";
+            document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°C";
+            document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+          } else {
+            console.error("API Error:", data.message);
+            alert("City not found. Please enter a valid city name.");
+          }
+        } catch (error) {
+          console.error("Request Error:", error);
+          alert("An error occurred while fetching weather data. Please try again later.");
+        }
+      }
+    
+       searchbtn.addEventListener("click",()=>{ 
+
+         checkweather(searchbox.value);
+       })
+    </script>
+
+
+  </body>
+</html>
